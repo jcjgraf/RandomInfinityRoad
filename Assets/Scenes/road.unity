@@ -113,68 +113,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &112933563
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 112933565}
-  - component: {fileID: 112933564}
-  m_Layer: 0
-  m_Name: roadGenerator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &112933564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 112933563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22515a15a71354ed286f68a9c7432a7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roadSegments:
-  - roadPrefab: {fileID: 100000, guid: eafd5b6e872ea45b68d27d41ab41b593, type: 3}
-    tandardPosition: {x: 0, y: 0, z: 0}
-    standardRotation: {x: 0, y: 0, z: 0}
-    standardScale: {x: 0, y: 0, z: 0}
-    deltaEndPosition: {x: 0, y: 0, z: 0}
-    deltaEndRotation: {x: 0, y: 0, z: 0}
-    deltaEndScale: {x: 0, y: 0, z: 0}
-  - roadPrefab: {fileID: 0}
-    tandardPosition: {x: 0, y: 0, z: 0}
-    standardRotation: {x: 0, y: 0, z: 0}
-    standardScale: {x: 0, y: 0, z: 0}
-    deltaEndPosition: {x: 0, y: 0, z: 0}
-    deltaEndRotation: {x: 0, y: 0, z: 0}
-    deltaEndScale: {x: 0, y: 0, z: 0}
-  - roadPrefab: {fileID: 0}
-    tandardPosition: {x: 0, y: 0, z: 0}
-    standardRotation: {x: 0, y: 0, z: 0}
-    standardScale: {x: 0, y: 0, z: 0}
-    deltaEndPosition: {x: 0, y: 0, z: 0}
-    deltaEndRotation: {x: 0, y: 0, z: 0}
-    deltaEndScale: {x: 0, y: 0, z: 0}
---- !u!4 &112933565
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 112933563}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.48, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &824637726
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,7 +197,7 @@ Transform:
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1327418034
 GameObject:
@@ -381,8 +319,109 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1001 &1634623719
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 1.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[0].deltaEndRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[0].deltaEndRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[0].prefab
+      value: 
+      objectReference: {fileID: 100000, guid: 0fb386ec3d0c64a76b13efcea64dee48, type: 3}
+    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 100000, guid: 542bbd2bc28bd46b0ae5ad0c5e8062e6, type: 3}
+    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[2].prefab
+      value: 
+      objectReference: {fileID: 100000, guid: 2213fff14b1fa43c696b2dc2f1c8a976, type: 3}
+    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[0].deltaEndPosition.z
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[1].deltaEndPosition.x
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[1].deltaEndPosition.z
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[2].deltaEndPosition.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[2].deltaEndPosition.z
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[0].standardPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &1658915655 stripped
 Transform:
