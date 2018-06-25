@@ -293,7 +293,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400050, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 1.48
+      value: 28.24
       objectReference: {fileID: 0}
     - target: {fileID: 400050, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
       propertyPath: m_LocalPosition.z
@@ -333,93 +333,79 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
       propertyPath: m_LocalPosition.y
       value: 1.48
       objectReference: {fileID: 0}
-    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4380199420527434, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[0].deltaEndRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[0].deltaEndRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[0].prefab
-      value: 
-      objectReference: {fileID: 100000, guid: 0fb386ec3d0c64a76b13efcea64dee48, type: 3}
-    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
+    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
         type: 2}
       propertyPath: roadSegments.Array.data[1].prefab
       value: 
-      objectReference: {fileID: 100000, guid: 542bbd2bc28bd46b0ae5ad0c5e8062e6, type: 3}
-    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
+      objectReference: {fileID: 1380423979809574, guid: a58116f0171fd460c84061d96c0057c1,
         type: 2}
-      propertyPath: roadSegments.Array.data[2].prefab
+    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[2].standardScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[2].standardScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[2].standardScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[2].deltaEndScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[2].deltaEndScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: roadSegments.Array.data[2].deltaEndScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
+        type: 2}
+      propertyPath: car
       value: 
-      objectReference: {fileID: 100000, guid: 2213fff14b1fa43c696b2dc2f1c8a976, type: 3}
-    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[0].deltaEndPosition.z
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[1].deltaEndPosition.x
-      value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[1].deltaEndPosition.z
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[2].deltaEndPosition.x
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[2].deltaEndPosition.z
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 114648353809346614, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[0].standardPosition.y
-      value: 0
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1658915655}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
   m_IsPrefabParent: 0
