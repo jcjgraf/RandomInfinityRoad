@@ -13,17 +13,21 @@ public class RoadGenerator : MonoBehaviour {
 
 	private Queue<Transform> roadSegmentsQueue;
 
+	private GameObject lastRoadSegment;
+
 	private int numberOfSegments;
 
 	private int lastIndex;
 
 	void Awake () {
 
+		TriggerManager.colliderTriggered += trigger;
+
 		roadSegmentsQueue = new Queue<Transform>();
 		segmentStartPosition = new Vector3(0, 0, 0);
 		segmentStartRotation = new Vector3(0, 0, 0);
 
-		numberOfSegments = 10;
+		numberOfSegments = 7;
 		lastIndex = 0;
 
 		for (int i = 0; i < numberOfSegments; i++) {
@@ -33,12 +37,14 @@ public class RoadGenerator : MonoBehaviour {
 	}
 	
 	void Update () {
+		/*
+			Get the name resp. its number of the first segment in the roadSegmentsQueme and compare it the with segment the car is on currently. If it has passed the first segment, destroy it and generate a new one.
+		*/
 
 		int firstSegment;
 		int.TryParse(roadSegmentsQueue.ToArray()[0].gameObject.GetComponentInChildren<Transform>().GetChild(0).name, out firstSegment);
 
 		if (getCurrentSegment() > firstSegment + 1) {
-			Debug.Log("Left first segment");
 
 			Transform toRemove = roadSegmentsQueue.Dequeue();
 			Destroy(toRemove.gameObject);
@@ -72,12 +78,13 @@ public class RoadGenerator : MonoBehaviour {
 
 	void addSegment() {
 
-		// int randInt = Random.Range(0, roadSegments.Length)
-		int randInt = Random.Range(0, 5);
+		// int randInt = Random.Range(0, roadSegments.Length);
+		int randInt = Random.Range(0, roadSegments.Length);
 
 		RoadSegment newRoadSegment;
 
 		if (randInt > roadSegments.Length - 1) {
+			// Ugly way to generate more straight segments
 			newRoadSegment = roadSegments[0];
 
 		} else {
@@ -85,6 +92,13 @@ public class RoadGenerator : MonoBehaviour {
 		}
 
 		GameObject newSegment = Instantiate<GameObject>(newRoadSegment.prefab);
+
+//TODO validate position
+
+		bool call = isValidPosition(newSegment, segmentStartPosition + newRoadSegment.standardPosition, segmentStartRotation + newRoadSegment.standardRotation, newRoadSegment.standardScale);
+
+
+
 
 		// Transform new gameObject
 		newSegment.transform.position = segmentStartPosition + newRoadSegment.standardPosition;
@@ -104,5 +118,61 @@ public class RoadGenerator : MonoBehaviour {
 		segmentStartRotation = segmentStartRotation + newRoadSegment.deltaEndRotation;
 
 		roadSegmentsQueue.Enqueue(newSegment.transform);
+
+		// remove trigger detection thingis of the second last road segment since there is already a new one in place on the new last one
+		try {
+	        removeTriggerDetection(lastRoadSegment);
+	    }
+	    catch {}
+
+		lastRoadSegment = newSegment;
 	}
+
+	bool isValidPosition(GameObject newSegment, Vector3 newPosition, Vector3 newRotation, Vector3 newScale) {
+
+		// Setup Rigidbody
+		Rigidbody newSegementRigidbody =  newSegment.AddComponent<Rigidbody>();
+		newSegementRigidbody.isKinematic = true;
+
+		// Add the class with the triggerEvent to the newly created gameObject
+		// TriggerManager triggerScript = newSegment.AddComponent(typeof(TriggerManager)) as TriggerManager;
+
+		newSegment.AddComponent(typeof(TriggerManager));
+
+		// Add collider and set right properties
+		MeshCollider newSegmentCollider = newSegment.gameObject.GetComponentInChildren<Transform>().GetChild(0).GetComponent<MeshCollider>();
+
+		newSegmentCollider.convex = true;
+		newSegmentCollider.isTrigger = true;
+
+		// Set segment to position
+		newSegment.transform.position = newPosition;
+		newSegment.transform.eulerAngles = newRotation;
+		newSegment.transform.localScale = newScale;
+
+		// Check that collision is not with the previous road segment (overlapping)
+
+		// Get trigger event and check for name
+
+		return false;
+
+	}
+
+	void removeTriggerDetection(GameObject segment) {
+
+		// Undo changes
+		segment.gameObject.GetComponentInChildren<Transform>().GetChild(0).GetComponent<MeshCollider>().isTrigger = false;
+		segment.gameObject.GetComponentInChildren<Transform>().GetChild(0).GetComponent<MeshCollider>().convex = false;
+		Destroy(segment.GetComponent<Rigidbody>());
+		// Destroy(newSegementRigidbody);
+		// Destroy(triggerScript);
+		Destroy(segment.GetComponent<TriggerManager>());
+
+	}
+
+	void trigger() {
+		
+		// Debug.Log("Event received");
+	}
+
 }
