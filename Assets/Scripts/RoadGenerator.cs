@@ -30,10 +30,7 @@ public class RoadGenerator : MonoBehaviour {
 		numberOfSegments = 7;
 		lastIndex = 0;
 
-		for (int i = 0; i < numberOfSegments; i++) {
-
-			addSegment();
-		}
+		generateRoad(0);
 	}
 	
 	void Update () {
@@ -44,12 +41,12 @@ public class RoadGenerator : MonoBehaviour {
 		int firstSegment;
 		int.TryParse(roadSegmentsQueue.ToArray()[0].gameObject.GetComponentInChildren<Transform>().GetChild(0).name, out firstSegment);
 
-		if (getCurrentSegment() > firstSegment + 1) {
+		if (getCurrentSegment() > firstSegment + 1) { // + 1 in order to always leave a segment
 
 			Transform toRemove = roadSegmentsQueue.Dequeue();
 			Destroy(toRemove.gameObject);
 
-			addSegment();
+			generateRoad();
 		}
 
 	}
@@ -76,35 +73,67 @@ public class RoadGenerator : MonoBehaviour {
 		return 0;
 	}
 
+	void generateRoad() {
+
+		if (roadSegmentsQueue.Count == numberOfSegments) {
+			return;
+		}
+
+		addSegment();
+		generateRoad();
+	}
+
+	void generateRoad(int segmentInt) {
+
+		if (roadSegmentsQueue.Count == numberOfSegments) {
+			return;
+		}
+
+		addSegment(segmentInt);
+		generateRoad(segmentInt);
+	}
+
 	void addSegment() {
 
-		// int randInt = Random.Range(0, roadSegments.Length);
-		int randInt = Random.Range(0, roadSegments.Length);
+		addSegment(Random.Range(0, roadSegments.Length));
+	}
+
+	void addSegment(int segmentInt) {
 
 		RoadSegment newRoadSegment;
 
-		if (randInt > roadSegments.Length - 1) {
+		if (segmentInt > roadSegments.Length - 1) {
 			// Ugly way to generate more straight segments
 			newRoadSegment = roadSegments[0];
 
 		} else {
-			newRoadSegment = roadSegments[randInt];
+			newRoadSegment = roadSegments[segmentInt];
 		}
 
 		GameObject newSegment = Instantiate<GameObject>(newRoadSegment.prefab);
 
-//TODO validate position
+		// Start used for detecting collisions
+		// Setup Rigidbody
+		Rigidbody newSegementRigidbody =  newSegment.AddComponent<Rigidbody>();
+		newSegementRigidbody.isKinematic = true;
 
-		bool call = isValidPosition(newSegment, segmentStartPosition + newRoadSegment.standardPosition, segmentStartRotation + newRoadSegment.standardRotation, newRoadSegment.standardScale);
+		// Add the class with the triggerEvent to the newly created gameObject
+		newSegment.AddComponent(typeof(TriggerManager));
 
+		// Add collider and set right properties
+		MeshCollider newSegmentCollider = newSegment.gameObject.GetComponentInChildren<Transform>().GetChild(0).GetComponent<MeshCollider>();
 
+		newSegmentCollider.convex = true;
+		newSegmentCollider.isTrigger = true;
 
+		// End used for detecting collisions
 
 		// Transform new gameObject
 		newSegment.transform.position = segmentStartPosition + newRoadSegment.standardPosition;
 		newSegment.transform.eulerAngles = segmentStartRotation + newRoadSegment.standardRotation;
 		newSegment.transform.localScale = newRoadSegment.standardScale;
 
+		// Set name of the road Segment
 		newSegment.gameObject.GetComponentInChildren<Transform>().GetChild(0).name = lastIndex.ToString();
 
 		lastIndex++;
@@ -121,41 +150,11 @@ public class RoadGenerator : MonoBehaviour {
 
 		// remove trigger detection thingis of the second last road segment since there is already a new one in place on the new last one
 		try {
-	        removeTriggerDetection(lastRoadSegment);
-	    }
-	    catch {}
+			removeTriggerDetection(lastRoadSegment);
+		}
+		catch {}
 
 		lastRoadSegment = newSegment;
-	}
-
-	bool isValidPosition(GameObject newSegment, Vector3 newPosition, Vector3 newRotation, Vector3 newScale) {
-
-		// Setup Rigidbody
-		Rigidbody newSegementRigidbody =  newSegment.AddComponent<Rigidbody>();
-		newSegementRigidbody.isKinematic = true;
-
-		// Add the class with the triggerEvent to the newly created gameObject
-		// TriggerManager triggerScript = newSegment.AddComponent(typeof(TriggerManager)) as TriggerManager;
-
-		newSegment.AddComponent(typeof(TriggerManager));
-
-		// Add collider and set right properties
-		MeshCollider newSegmentCollider = newSegment.gameObject.GetComponentInChildren<Transform>().GetChild(0).GetComponent<MeshCollider>();
-
-		newSegmentCollider.convex = true;
-		newSegmentCollider.isTrigger = true;
-
-		// Set segment to position
-		newSegment.transform.position = newPosition;
-		newSegment.transform.eulerAngles = newRotation;
-		newSegment.transform.localScale = newScale;
-
-		// Check that collision is not with the previous road segment (overlapping)
-
-		// Get trigger event and check for name
-
-		return false;
-
 	}
 
 	void removeTriggerDetection(GameObject segment) {
@@ -171,8 +170,37 @@ public class RoadGenerator : MonoBehaviour {
 	}
 
 	void trigger(Collider collider) {
-		
-		Debug.Log("Collided with " + collider.gameObject.name);
+
+		if (int.Parse(collider.gameObject.name) + 1 == int.Parse(lastRoadSegment.GetComponentInChildren<Transform>().GetChild(0).name) || int.Parse(collider.gameObject.name) == int.Parse(lastRoadSegment.GetComponentInChildren<Transform>().GetChild(0).name)) {
+			// Debug.Log("Harmless collision");
+		} else {
+			Debug.Log("Fatal collision");
+			Debug.Log("Collided with " + collider.gameObject.name + " - " + lastRoadSegment.GetComponentInChildren<Transform>().GetChild(0).name);
+
+			Transform[] segments = roadSegmentsQueue.ToArray();
+
+			// One collision might be triggered several times. After removing it after the first collision a it cannot be removed a second time -> an err is thorwn
+			try {
+				for (int i = 1; i <= 3 ; i--) {
+					// Get old segmentStartPos after the segments are removed such that the new segments are placed at the right position
+
+					Transform segment = segments[segments.Length - i];
+
+					segmentStartPosition = segmentStartPosition - segment.gameObject.standardPosition;
+					segmentStartRotation = segmentStartRotation - segment.gameObject.standardRotation;
+
+					// In order to keep the right numbering
+					lastIndex--;
+
+					Destroy(segments[segments.Length - i].gameObject);
+				}
+			} catch {}
+
+
+			// generateRoad();
+
+
+		}
 	}
 
 }

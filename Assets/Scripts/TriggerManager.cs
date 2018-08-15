@@ -11,7 +11,7 @@ public class TriggerManager : MonoBehaviour {
 
 		if (collider.gameObject.name != "Plane") {
 
-			Debug.Log("Intersecting roads detected: " + collider.gameObject.name);
+			// Debug.Log("Intersecting roads detected: " + collider.gameObject.name);
 			
 			// make sure that we have a subscriber before calling the event
 			if (colliderTriggered != null) {
