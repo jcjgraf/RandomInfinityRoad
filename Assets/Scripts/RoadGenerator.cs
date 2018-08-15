@@ -170,9 +170,9 @@ public class RoadGenerator : MonoBehaviour {
 
 	}
 
-	void trigger() {
+	void trigger(Collider collider) {
 		
-		// Debug.Log("Event received");
+		Debug.Log("Collided with " + collider.gameObject.name);
 	}
 
 }

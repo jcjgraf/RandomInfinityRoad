@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TriggerManager : MonoBehaviour {
 
-	public delegate void TriggerEvent();
+	public delegate void TriggerEvent(Collider collider);
 	public static event TriggerEvent colliderTriggered;
 
 	void OnTriggerEnter(Collider collider) {
@@ -15,7 +15,7 @@ public class TriggerManager : MonoBehaviour {
 			
 			// make sure that we have a subscriber before calling the event
 			if (colliderTriggered != null) {
-				colliderTriggered();
+				colliderTriggered(collider);
 			}
 
 		}
