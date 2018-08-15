@@ -19,6 +19,9 @@ public class RoadGenerator : MonoBehaviour {
 
 	private int lastIndex;
 
+	// Needed since it might trigger several collisions in the same frame
+	private bool hasTriggered = false;
+
 	void Awake () {
 
 		TriggerManager.colliderTriggered += trigger;
@@ -27,7 +30,7 @@ public class RoadGenerator : MonoBehaviour {
 		segmentStartPosition = new Vector3(0, 0, 0);
 		segmentStartRotation = new Vector3(0, 0, 0);
 
-		numberOfSegments = 15;
+		numberOfSegments = 7;
 		lastIndex = 0;
 
 		generateRoad(0);
@@ -46,8 +49,12 @@ public class RoadGenerator : MonoBehaviour {
 			Transform toRemove = roadSegmentsQueue.Dequeue();
 			Destroy(toRemove.gameObject);
 
-			generateRoad();
+
 		}
+
+		generateRoad();
+
+		hasTriggered = false;
 
 		// Debug
 //		GameObject mySphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -79,7 +86,7 @@ public class RoadGenerator : MonoBehaviour {
 
 	void generateRoad() {
 
-		if (roadSegmentsQueue.Count == numberOfSegments) {
+		if (roadSegmentsQueue.ToArray().Length == numberOfSegments) {
 			return;
 		}
 
@@ -166,9 +173,6 @@ public class RoadGenerator : MonoBehaviour {
 		// Undo changes
 		segment.gameObject.GetComponentInChildren<Transform>().GetChild(0).GetComponent<MeshCollider>().isTrigger = false;
 		segment.gameObject.GetComponentInChildren<Transform>().GetChild(0).GetComponent<MeshCollider>().convex = false;
-		Destroy(segment.GetComponent<Rigidbody>());
-		// Destroy(newSegementRigidbody);
-		// Destroy(triggerScript);
 		Destroy(segment.GetComponent<TriggerManager>());
 
 	}
@@ -182,19 +186,19 @@ public class RoadGenerator : MonoBehaviour {
 		bool parseII = int.TryParse (lastRoadSegment.GetComponentInChildren<Transform> ().GetChild (0).name, out segmentNameInt);
 
 		// If both parse succeedes
-		if (parseI && parseII) {
+		if (parseI && parseII && hasTriggered == false) {
 
 			if (colliderNameInt + 1 == segmentNameInt || colliderNameInt == segmentNameInt) {
 				// Debug.Log("Harmless collision");
 			} else {
-				Debug.Log ("Fatal collision");
+//				Debug.Log ("Fatal collision");
 				Debug.Log ("Collided with " + collider.gameObject.name + " - " + lastRoadSegment.GetComponentInChildren<Transform> ().GetChild (0).name);
 
 				Transform[] segments = roadSegmentsQueue.ToArray ();
 
 				// One collision might be triggered several times. After removing it after the first collision a it cannot be removed a second time -> an err is thorwn
 				try {
-					for (int i = 1; i <= 1; i++) {
+					for (int i = 1; i <= 2; i++) {
 						// Iterate over the list with roadSegments in order to find the one whichs prefab we are going to delete. We need to do that in order to find out the attributes of that segment like length etc
 
 						Transform segment = segments [segments.Length - i];
@@ -210,21 +214,25 @@ public class RoadGenerator : MonoBehaviour {
 
 								// Update (/undo) position and rotation
 								float angle = -1 * (segmentStartRotation.y * Mathf.PI / 180);
-								Vector3 deltaMove = new Vector3 (roadSegment.deltaEndPosition.x * Mathf.Cos (angle) - roadSegment.deltaEndPosition.z * Mathf.Sin (angle), 0, roadSegment.deltaEndPosition.x * Mathf.Sin (angle) + roadSegment.deltaEndPosition.z * Mathf.Cos (angle));
+								Vector3 deltaMove = new Vector3 (roadSegment.deltaEndPosition.x * Mathf.Cos (angle) + roadSegment.deltaEndPosition.z * Mathf.Sin (angle), 0, roadSegment.deltaEndPosition.x * Mathf.Sin (angle) - roadSegment.deltaEndPosition.z * Mathf.Cos (angle));
 
-								segmentStartPosition = segmentStartPosition - deltaMove;
+								Debug.Log(segmentStartPosition);
+								segmentStartPosition = segmentStartPosition + deltaMove;
 								segmentStartRotation = segmentStartRotation - roadSegment.deltaEndRotation;
+
+								Debug.Log(segmentStartPosition);
 
 								// Debug
 								GameObject mySphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 								mySphere.transform.position = segmentStartPosition;
 
+								hasTriggered = true;
 								break;
 							}
 						}
 
 						// In order to keep the right numbering
-						// lastIndex--;
+						 lastIndex--;
 
 						Destroy (segments [segments.Length - i].gameObject);
 					}
