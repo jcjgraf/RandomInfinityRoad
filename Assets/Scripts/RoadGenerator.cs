@@ -27,7 +27,7 @@ public class RoadGenerator : MonoBehaviour {
 		segmentStartPosition = new Vector3(0, 0, 0);
 		segmentStartRotation = new Vector3(0, 0, 0);
 
-		numberOfSegments = 7;
+		numberOfSegments = 15;
 		lastIndex = 0;
 
 		generateRoad(0);
@@ -48,6 +48,10 @@ public class RoadGenerator : MonoBehaviour {
 
 			generateRoad();
 		}
+
+		// Debug
+//		GameObject mySphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+//		mySphere.transform.position = segmentStartPosition;
 
 	}
 
@@ -171,35 +175,67 @@ public class RoadGenerator : MonoBehaviour {
 
 	void trigger(Collider collider) {
 
-		if (int.Parse(collider.gameObject.name) + 1 == int.Parse(lastRoadSegment.GetComponentInChildren<Transform>().GetChild(0).name) || int.Parse(collider.gameObject.name) == int.Parse(lastRoadSegment.GetComponentInChildren<Transform>().GetChild(0).name)) {
-			// Debug.Log("Harmless collision");
-		} else {
-			Debug.Log("Fatal collision");
-			Debug.Log("Collided with " + collider.gameObject.name + " - " + lastRoadSegment.GetComponentInChildren<Transform>().GetChild(0).name);
+		int colliderNameInt = 0;
+		int segmentNameInt = 0;
 
-			Transform[] segments = roadSegmentsQueue.ToArray();
+		bool parseI = int.TryParse (collider.gameObject.name, out colliderNameInt);
+		bool parseII = int.TryParse (lastRoadSegment.GetComponentInChildren<Transform> ().GetChild (0).name, out segmentNameInt);
 
-			// One collision might be triggered several times. After removing it after the first collision a it cannot be removed a second time -> an err is thorwn
-			try {
-				for (int i = 1; i <= 3 ; i--) {
-					// Get old segmentStartPos after the segments are removed such that the new segments are placed at the right position
+		// If both parse succeedes
+		if (parseI && parseII) {
 
-					Transform segment = segments[segments.Length - i];
+			if (colliderNameInt + 1 == segmentNameInt || colliderNameInt == segmentNameInt) {
+				// Debug.Log("Harmless collision");
+			} else {
+				Debug.Log ("Fatal collision");
+				Debug.Log ("Collided with " + collider.gameObject.name + " - " + lastRoadSegment.GetComponentInChildren<Transform> ().GetChild (0).name);
 
-					segmentStartPosition = segmentStartPosition - segment.gameObject.standardPosition;
-					segmentStartRotation = segmentStartRotation - segment.gameObject.standardRotation;
+				Transform[] segments = roadSegmentsQueue.ToArray ();
 
-					// In order to keep the right numbering
-					lastIndex--;
+				// One collision might be triggered several times. After removing it after the first collision a it cannot be removed a second time -> an err is thorwn
+				try {
+					for (int i = 1; i <= 1; i++) {
+						// Iterate over the list with roadSegments in order to find the one whichs prefab we are going to delete. We need to do that in order to find out the attributes of that segment like length etc
 
-					Destroy(segments[segments.Length - i].gameObject);
+						Transform segment = segments [segments.Length - i];
+
+						// Name of the segment to remove. Strip the "(Clone)" from the end
+						string segmentName = segment.gameObject.name.Substring (0, segment.gameObject.name.Length - 7);
+
+						// Find the right roadSegment
+						foreach (RoadSegment roadSegment in roadSegments) {
+							if (roadSegment.prefab.gameObject.name == segmentName) {
+
+								Debug.Log ("Found element: " + roadSegment.prefab.gameObject.name);
+
+								// Update (/undo) position and rotation
+								float angle = -1 * (segmentStartRotation.y * Mathf.PI / 180);
+								Vector3 deltaMove = new Vector3 (roadSegment.deltaEndPosition.x * Mathf.Cos (angle) - roadSegment.deltaEndPosition.z * Mathf.Sin (angle), 0, roadSegment.deltaEndPosition.x * Mathf.Sin (angle) + roadSegment.deltaEndPosition.z * Mathf.Cos (angle));
+
+								segmentStartPosition = segmentStartPosition - deltaMove;
+								segmentStartRotation = segmentStartRotation - roadSegment.deltaEndRotation;
+
+								// Debug
+								GameObject mySphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+								mySphere.transform.position = segmentStartPosition;
+
+								break;
+							}
+						}
+
+						// In order to keep the right numbering
+						// lastIndex--;
+
+						Destroy (segments [segments.Length - i].gameObject);
+					}
+				} catch {
 				}
-			} catch {}
 
 
-			// generateRoad();
+				// generateRoad();
 
 
+			}
 		}
 	}
 
