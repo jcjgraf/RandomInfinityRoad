@@ -22,7 +22,7 @@ public class RoadGenerator : MonoBehaviour {
 	private List<Vector3> startPositionList;
 	private List<Vector3> startRotationList;
 
-	// todo temp
+	//TODO for debugging
 	private List<int> numberList;
 
 	// Needed since it might trigger several collisions in the same frame
@@ -36,14 +36,18 @@ public class RoadGenerator : MonoBehaviour {
 		segmentStartPosition = new Vector3(0, 0, 0);
 		segmentStartRotation = new Vector3(0, 0, 0);
 
-		numberOfSegments = 5;
+		startPositionList = new List<Vector3>();
+		startRotationList = new List<Vector3>();
+		startPositionList.Add(segmentStartPosition);
+		startRotationList.Add(segmentStartRotation);
+
+		numberOfSegments = 7;
 		lastIndex = 0;
 
-		//TODO temp
-		numberList = new List<int>() { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+		//TODO for debugging
+		numberList = new List<int>() { 0, 0, 1, 1, 1, 0, 0, 0, 0};
 
-
-
+		// Create straight road segments at the beginning
 		generateRoad(0);
 	}
 	
@@ -60,17 +64,13 @@ public class RoadGenerator : MonoBehaviour {
 			Transform toRemove = roadSegmentsQueue.Dequeue();
 			Destroy(toRemove.gameObject);
 
-
+			startPositionList.RemoveAt (0);
+			startRotationList.RemoveAt (0);
 		}
 
 		generateRoad();
 
 		hasTriggered = false;
-
-		// Debug
-//		GameObject mySphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-//		mySphere.transform.position = segmentStartPosition;
-
 	}
 
 	int getCurrentSegment() {
@@ -117,7 +117,7 @@ public class RoadGenerator : MonoBehaviour {
 
 	void addSegment() {
 
-		addSegment(Random.Range(0, roadSegments.Length -1 ));
+		addSegment(Random.Range(0, roadSegments.Length));
 	}
 
 	void addSegment(int segmentInt) {
@@ -132,13 +132,13 @@ public class RoadGenerator : MonoBehaviour {
 			newRoadSegment = roadSegments[segmentInt];
 		}
 
-		// TODO Temp
-		newRoadSegment = roadSegments[numberList[0]];
-		numberList.RemoveAt(0);
+		//TODO uncomment for debugging
+//		newRoadSegment = roadSegments[numberList[0]];
+//		numberList.RemoveAt(0);
 
 		GameObject newSegment = Instantiate<GameObject>(newRoadSegment.prefab);
 
-		// Start used for detecting collisions
+		// Start - used for detecting collisions
 		// Setup Rigidbody
 		Rigidbody newSegementRigidbody =  newSegment.AddComponent<Rigidbody>();
 		newSegementRigidbody.isKinematic = true;
@@ -151,8 +151,7 @@ public class RoadGenerator : MonoBehaviour {
 
 		newSegmentCollider.convex = true;
 		newSegmentCollider.isTrigger = true;
-
-		// End used for detecting collisions
+		// End - used for detecting collisions
 
 		// Transform new gameObject
 		newSegment.transform.position = segmentStartPosition + newRoadSegment.standardPosition;
@@ -173,6 +172,9 @@ public class RoadGenerator : MonoBehaviour {
 	
 		segmentStartPosition = segmentStartPosition + deltaMove;
 		segmentStartRotation = segmentStartRotation + newRoadSegment.deltaEndRotation;
+
+		startPositionList.Add (segmentStartPosition);
+		startRotationList.Add (segmentStartRotation);
 
 		roadSegmentsQueue.Enqueue(newSegment.transform);
 
@@ -202,57 +204,46 @@ public class RoadGenerator : MonoBehaviour {
 		bool parseI = int.TryParse (collider.gameObject.name, out colliderNameInt);
 		bool parseII = int.TryParse (lastRoadSegment.GetComponentInChildren<Transform> ().GetChild (0).name, out segmentNameInt);
 
-		// If both parse succeedes
+		// If both parse succeedes, i.e. both are road segments
 		if (parseI && parseII && hasTriggered == false) {
 
+			// Collision with previous road segment (or with own segment for some reason) are legal
 			if (colliderNameInt + 1 == segmentNameInt || colliderNameInt == segmentNameInt) {
-				// Debug.Log("Harmless collision");
+				 Debug.Log("Legal collision");
+
+			// Collision with another road segment
 			} else {
-//				Debug.Log ("Fatal collision");
 				Debug.Log ("Collided with " + collider.gameObject.name + " - " + lastRoadSegment.GetComponentInChildren<Transform> ().GetChild (0).name);
 
 				// One collision might be triggered several times. After removing it after the first collision a it cannot be removed a second time -> an err is thorwn
 				try {
 
+					// Since it is not possible to remove from the end of a queue with have to go through the list until we are at the elements of the end which we want to remove
 					for (int j = 0; j < numberOfSegments; j++) {
 
+						// This - n is the number of segments which we want to remove after a collision was detected
 						if (j < numberOfSegments - 2) {
+							Debug.Log("Add segment to the end");
 							roadSegmentsQueue.Enqueue(roadSegmentsQueue.Dequeue());
 
 						} else {
+							Debug.Log("Destroy segment");
 
 							Transform segment = roadSegmentsQueue.Dequeue();
 
-							// Name of the segment to remove. Strip the "(Clone)" from the end
-							string segmentName = segment.gameObject.name.Substring (0, segment.gameObject.name.Length - 7);
+							startPositionList.RemoveAt(startPositionList.Count - 1);
+							startRotationList.RemoveAt(startRotationList.Count - 1);
 
-						 	// Find the right roadSegment
-							foreach (RoadSegment roadSegment in roadSegments) {
-								if (roadSegment.prefab.gameObject.name == segmentName) {
-	
-									Debug.Log ("Found element: " + roadSegment.prefab.gameObject.name);
-	
-									// Update (/undo) position and rotation
-									float angle = -1 * (segmentStartRotation.y * Mathf.PI / 180);
-									Vector3 deltaMove = new Vector3(roadSegment.deltaEndPosition.x * Mathf.Cos(angle) - roadSegment.deltaEndPosition.z * Mathf.Sin(angle), 0, roadSegment.deltaEndPosition.x * Mathf.Sin(angle) + roadSegment.deltaEndPosition.z * Mathf.Cos(angle));
-	
-//									Debug.Log(segmentStartPosition);
-									segmentStartPosition = segmentStartPosition - deltaMove;
-									segmentStartRotation = segmentStartRotation - roadSegment.deltaEndRotation;
-//									Debug.Log(segmentStartPosition);
+							segmentStartPosition = startPositionList[startPositionList.Count - 1];
+							segmentStartRotation = startRotationList[startRotationList.Count - 1];
 
-									// In order to keep the right numbering
-									lastIndex--;
-	
-									hasTriggered = true;
-									break;
-								}
-							}
-	
+							hasTriggered = true;	
 							Destroy (segment.gameObject);
 						}
 					}
-				} catch {}
+				} catch {
+					Debug.Log ("Element already removed");
+				}
 			}
 		}
 	}
