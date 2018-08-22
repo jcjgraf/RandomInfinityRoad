@@ -19,6 +19,12 @@ public class RoadGenerator : MonoBehaviour {
 
 	private int lastIndex;
 
+	private List<Vector3> startPositionList;
+	private List<Vector3> startRotationList;
+
+	// todo temp
+	private List<int> numberList;
+
 	// Needed since it might trigger several collisions in the same frame
 	private bool hasTriggered = false;
 
@@ -30,8 +36,13 @@ public class RoadGenerator : MonoBehaviour {
 		segmentStartPosition = new Vector3(0, 0, 0);
 		segmentStartRotation = new Vector3(0, 0, 0);
 
-		numberOfSegments = 7;
+		numberOfSegments = 5;
 		lastIndex = 0;
+
+		//TODO temp
+		numberList = new List<int>() { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+
+
 
 		generateRoad(0);
 	}
@@ -106,20 +117,24 @@ public class RoadGenerator : MonoBehaviour {
 
 	void addSegment() {
 
-		addSegment(Random.Range(0, roadSegments.Length));
+		addSegment(Random.Range(0, roadSegments.Length -1 ));
 	}
 
 	void addSegment(int segmentInt) {
 
 		RoadSegment newRoadSegment;
 
-		if (segmentInt > roadSegments.Length - 1) {
+		if (segmentInt > roadSegments.Length) {
 			// Ugly way to generate more straight segments
 			newRoadSegment = roadSegments[0];
 
 		} else {
 			newRoadSegment = roadSegments[segmentInt];
 		}
+
+		// TODO Temp
+		newRoadSegment = roadSegments[numberList[0]];
+		numberList.RemoveAt(0);
 
 		GameObject newSegment = Instantiate<GameObject>(newRoadSegment.prefab);
 
@@ -150,10 +165,12 @@ public class RoadGenerator : MonoBehaviour {
 		lastIndex++;
 
 		// Update position and rotation
+		// Deg to Rad
 		float angle = -1 * (segmentStartRotation.y * Mathf.PI / 180);  // The -1 is needed since the rotation matrix works in the other way around as the unity rotation system
 		// Apply a rotation vectory
+		// Multiply by the roation matrix
 		Vector3 deltaMove = new Vector3(newRoadSegment.deltaEndPosition.x * Mathf.Cos(angle) - newRoadSegment.deltaEndPosition.z * Mathf.Sin(angle), 0, newRoadSegment.deltaEndPosition.x * Mathf.Sin(angle) + newRoadSegment.deltaEndPosition.z * Mathf.Cos(angle));
-
+	
 		segmentStartPosition = segmentStartPosition + deltaMove;
 		segmentStartRotation = segmentStartRotation + newRoadSegment.deltaEndRotation;
 
@@ -194,55 +211,48 @@ public class RoadGenerator : MonoBehaviour {
 //				Debug.Log ("Fatal collision");
 				Debug.Log ("Collided with " + collider.gameObject.name + " - " + lastRoadSegment.GetComponentInChildren<Transform> ().GetChild (0).name);
 
-				Transform[] segments = roadSegmentsQueue.ToArray ();
-
 				// One collision might be triggered several times. After removing it after the first collision a it cannot be removed a second time -> an err is thorwn
 				try {
-					for (int i = 1; i <= 2; i++) {
-						// Iterate over the list with roadSegments in order to find the one whichs prefab we are going to delete. We need to do that in order to find out the attributes of that segment like length etc
 
-						Transform segment = segments [segments.Length - i];
+					for (int j = 0; j < numberOfSegments; j++) {
 
-						// Name of the segment to remove. Strip the "(Clone)" from the end
-						string segmentName = segment.gameObject.name.Substring (0, segment.gameObject.name.Length - 7);
+						if (j < numberOfSegments - 2) {
+							roadSegmentsQueue.Enqueue(roadSegmentsQueue.Dequeue());
 
-						// Find the right roadSegment
-						foreach (RoadSegment roadSegment in roadSegments) {
-							if (roadSegment.prefab.gameObject.name == segmentName) {
+						} else {
 
-								Debug.Log ("Found element: " + roadSegment.prefab.gameObject.name);
+							Transform segment = roadSegmentsQueue.Dequeue();
 
-								// Update (/undo) position and rotation
-								float angle = -1 * (segmentStartRotation.y * Mathf.PI / 180);
-								Vector3 deltaMove = new Vector3 (roadSegment.deltaEndPosition.x * Mathf.Cos (angle) + roadSegment.deltaEndPosition.z * Mathf.Sin (angle), 0, roadSegment.deltaEndPosition.x * Mathf.Sin (angle) - roadSegment.deltaEndPosition.z * Mathf.Cos (angle));
+							// Name of the segment to remove. Strip the "(Clone)" from the end
+							string segmentName = segment.gameObject.name.Substring (0, segment.gameObject.name.Length - 7);
 
-								Debug.Log(segmentStartPosition);
-								segmentStartPosition = segmentStartPosition + deltaMove;
-								segmentStartRotation = segmentStartRotation - roadSegment.deltaEndRotation;
+						 	// Find the right roadSegment
+							foreach (RoadSegment roadSegment in roadSegments) {
+								if (roadSegment.prefab.gameObject.name == segmentName) {
+	
+									Debug.Log ("Found element: " + roadSegment.prefab.gameObject.name);
+	
+									// Update (/undo) position and rotation
+									float angle = -1 * (segmentStartRotation.y * Mathf.PI / 180);
+									Vector3 deltaMove = new Vector3(roadSegment.deltaEndPosition.x * Mathf.Cos(angle) - roadSegment.deltaEndPosition.z * Mathf.Sin(angle), 0, roadSegment.deltaEndPosition.x * Mathf.Sin(angle) + roadSegment.deltaEndPosition.z * Mathf.Cos(angle));
+	
+//									Debug.Log(segmentStartPosition);
+									segmentStartPosition = segmentStartPosition - deltaMove;
+									segmentStartRotation = segmentStartRotation - roadSegment.deltaEndRotation;
+//									Debug.Log(segmentStartPosition);
 
-								Debug.Log(segmentStartPosition);
-
-								// Debug
-								GameObject mySphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-								mySphere.transform.position = segmentStartPosition;
-
-								hasTriggered = true;
-								break;
+									// In order to keep the right numbering
+									lastIndex--;
+	
+									hasTriggered = true;
+									break;
+								}
 							}
+	
+							Destroy (segment.gameObject);
 						}
-
-						// In order to keep the right numbering
-						 lastIndex--;
-
-						Destroy (segments [segments.Length - i].gameObject);
 					}
-				} catch {
-				}
-
-
-				// generateRoad();
-
-
+				} catch {}
 			}
 		}
 	}
