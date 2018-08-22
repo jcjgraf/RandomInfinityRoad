@@ -414,81 +414,49 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4053052286167290, guid: 28c041f58f3ff456bb06d82d6ffd5594, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4053052286167290, guid: 28c041f58f3ff456bb06d82d6ffd5594, type: 2}
       propertyPath: m_LocalPosition.y
       value: 1.48
       objectReference: {fileID: 0}
-    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4053052286167290, guid: 28c041f58f3ff456bb06d82d6ffd5594, type: 2}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4053052286167290, guid: 28c041f58f3ff456bb06d82d6ffd5594, type: 2}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4053052286167290, guid: 28c041f58f3ff456bb06d82d6ffd5594, type: 2}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4053052286167290, guid: 28c041f58f3ff456bb06d82d6ffd5594, type: 2}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4053052286167290, guid: 28c041f58f3ff456bb06d82d6ffd5594, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4991419102337058, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+    - target: {fileID: 4053052286167290, guid: 28c041f58f3ff456bb06d82d6ffd5594, type: 2}
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[1].prefab
-      value: 
-      objectReference: {fileID: 1380423979809574, guid: a58116f0171fd460c84061d96c0057c1,
-        type: 2}
-    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[2].standardScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[2].standardScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[2].standardScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[2].deltaEndScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[2].deltaEndScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
-        type: 2}
-      propertyPath: roadSegments.Array.data[2].deltaEndScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114786528487648972, guid: c9b75086891c54f7abc29f6eaad67c6d,
+    - target: {fileID: 114632953267506100, guid: 28c041f58f3ff456bb06d82d6ffd5594,
         type: 2}
       propertyPath: car
       value: 
       objectReference: {fileID: 1658915655}
+    - target: {fileID: 1614924157228576, guid: 28c041f58f3ff456bb06d82d6ffd5594, type: 2}
+      propertyPath: m_Name
+      value: roadGenerator
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: c9b75086891c54f7abc29f6eaad67c6d, type: 2}
+  m_ParentPrefab: {fileID: 100100000, guid: 28c041f58f3ff456bb06d82d6ffd5594, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &1658915655 stripped
 Transform:
